@@ -78,9 +78,9 @@
         <div class="mt-6 grid grid-cols-12 md:gap-x-8 gap-y-12 sm:mt-12">
             <div class="col-span-12 lg:col-span-4">
                 <p class="max-w-sm text-xs text-gray-700 sm:text-sm {{ $is_docs_page ? 'dark:text-gray-500' : '' }}">
-                    Laravel is a web application framework with expressive, elegant syntax. We believe development must
-                    be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain
-                    out of development by easing common tasks used in most web projects.</p>
+                    Laravel - це фреймворк для веб-додатків з виразним, елегантним синтаксисом. Ми вважаємо, що розробка повинна бути
+                    бути приємним і творчим процесом, щоб бути по-справжньому повноцінним. Laravel намагається позбавити вас болю
+                    з розробки, полегшуючи типові завдання, що використовуються у більшості веб-проектів.</p>
                 <ul class="mt-6 flex items-center space-x-3">
                     <li>
                         <a href="https://x.com/laravelphp">
@@ -139,11 +139,11 @@
         </div>
         <div class="mt-10 border-t pt-6 pb-16 border-gray-200 {{ $is_docs_page ? 'dark:border-dark-500' : '' }}">
             <p class="text-xs text-gray-700 {{ $is_docs_page ? 'dark:text-gray-400' : '' }}">
-                Laravel is a Trademark of Laravel Holdings Inc.<br />
-                Copyright &copy; 2011-{{ now()->format('Y') }} Laravel Holdings Inc.
+                Laravel є торговою маркою Laravel Holdings Inc.<br />
+                Авторське право &copy; 2011-{{ now()->format('Y') }} Laravel Holdings Inc.
             </p>
             <p class="mt-6 text-xs text-gray-700 {{ $is_docs_page ? 'dark:text-gray-400' : '' }}">
-                Code highlighting provided by <a href="https://torchlight.dev">Torchlight</a>
+                Підсвічування коду надано <a href="https://torchlight.dev">Torchlight</a>
             </p>
         </div>
     </div>
