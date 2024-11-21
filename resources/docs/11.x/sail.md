@@ -1,5 +1,4 @@
 # Laravel Sail
-
 - [Introduction](#introduction)
 - [Installation and Setup](#installation)
     - [Installing Sail Into Existing Applications](#installing-sail-into-existing-applications)
