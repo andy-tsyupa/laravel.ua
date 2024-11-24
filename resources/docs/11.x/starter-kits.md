@@ -19,9 +19,9 @@
 <a name="laravel-breeze"></a>
 ## Laravel Breeze
 
-[Laravel Breeze](https://github.com/laravel/breeze) є мінімальною, простою реалізацією всіх можливостей Laravel [authentication features](/docs/{{version}}/authentication), включаючи вхід, реєстрацію, скидання пароля, перевірку електронної пошти та підтвердження пароля. Крім того, Breeze включає просту сторінку "профілю", де користувач може оновити своє ім'я, адресу електронної пошти та пароль.
+[Laravel Breeze](https://github.com/laravel/breeze) є мінімальною, простою реалізацією всіх можливостей Laravel [автентифікації](/docs/{{version}}/authentication), включаючи вхід, реєстрацію, скидання пароля, перевірку електронної пошти та підтвердження пароля. Крім того, Breeze включає просту сторінку "профілю", де користувач може оновити своє ім'я, адресу електронної пошти та пароль.
 
-Шар перегляду за замовчуванням у Laravel Breeze складається з простих [Blade templates](/docs/{{version}}/blade) стилізовано під [Tailwind CSS](https://tailwindcss.com). Крім того, Breeze пропонує варіанти риштування на основі [Livewire](https://livewire.laravel.com) або [Inertia](https://inertiajs.com), з можливістю використання Vue або React для інерційного риштування.
+Шар перегляду за замовчуванням у Laravel Breeze складається з простих [Blade шаблонів](/docs/{{version}}/blade) стилізовано під [Tailwind CSS](https://tailwindcss.com). Крім того, Breeze пропонує варіанти риштування на основі [Livewire](https://livewire.laravel.com) або [Inertia](https://inertiajs.com), з можливістю використання Vue або React для інерційного риштування.
 
 <img src="https://laravel.com/img/docs/breeze-register.png">
 
@@ -30,7 +30,7 @@
 Якщо ви новачок в Laravel, сміливо переходьте в розділ [Laravel Bootcamp](https://bootcamp.laravel.com). Laravel Bootcamp допоможе вам створити свій перший додаток Laravel за допомогою Breeze. Це чудовий спосіб ознайомитися з усім, що можуть запропонувати Laravel та Breeze.
 
 <a name="laravel-breeze-installation"></a>
-### Installation
+### Встановлення
 
 По-перше, ви повинні [створити новий Laravel-додаток](/docs/{{version}}/installation). Якщо ви створюєте свій додаток з використанням [Інсталятор Laravel](/docs/{{version}}/installation#creating-a-laravel-project) вам буде запропоновано встановити Laravel Breeze під час процесу інсталяції. В іншому випадку вам потрібно буде слідувати інструкціям по встановленню, наведеним нижче.
 
@@ -68,7 +68,7 @@ npm run dev
 Далі ви можете перейти на URL-адреси `/login` або `/register` вашого додатку у вашому веб-браузері. Всі маршрути Breeze визначені у файлі `routes/auth.php`.
 
 > [!NOTE]  
-> Щоб дізнатися більше про компіляцію CSS і JavaScript вашого додатка, перегляньте статтю Laravel [Vite documentation](/docs/{{version}}/vite#running-vite).
+> Щоб дізнатися більше про компіляцію CSS і JavaScript вашого додатка, перегляньте статтю Laravel [Vite документацію](/docs/{{version}}/vite#running-vite).
 
 <a name="breeze-and-livewire"></a>
 ### Breeze і Livewire
