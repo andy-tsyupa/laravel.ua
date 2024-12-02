@@ -9,6 +9,10 @@
 
 define('LARAVEL_START', microtime(true));
 
+if (! defined('DEFAULT_VERSION')) {
+    define('DEFAULT_VERSION', '11.x');
+}
+
 if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
     require __DIR__.'/../storage/framework/maintenance.php';
 }
