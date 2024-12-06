@@ -254,104 +254,104 @@ composer require nyholm/psr7
 
     $input = $request->collect();
 
-The `collect` method also allows you to retrieve a subset of the incoming request's input as a collection:
+Метод `collect` також дозволяє отримати підмножину вхідних даних запиту у вигляді колекції:
 
     $request->collect('users')->each(function (string $user) {
         // ...
     });
 
 <a name="retrieving-an-input-value"></a>
-#### Retrieving an Input Value
+#### Отримання вхідного значення
 
-Using a few simple methods, you may access all of the user input from your `Illuminate\Http\Request` instance without worrying about which HTTP verb was used for the request. Regardless of the HTTP verb, the `input` method may be used to retrieve user input:
+Використовуючи кілька простих методів, ви можете отримати доступ до всього користувацького вводу з вашого екземпляра `Illuminate\Http\Request`, не турбуючись про те, яке HTTP-дієслово було використано для запиту. Незалежно від HTTP-дієслова, метод `input` може бути використаний для отримання даних користувача:
 
     $name = $request->input('name');
 
-You may pass a default value as the second argument to the `input` method. This value will be returned if the requested input value is not present on the request:
+Ви можете передати значення за замовчуванням як другий аргумент методу `input`. Це значення буде повернуто, якщо у запиті відсутнє запитуване вхідне значення:
 
     $name = $request->input('name', 'Sally');
 
-When working with forms that contain array inputs, use "dot" notation to access the arrays:
+При роботі з формами, що містять вхідні дані у вигляді масивів, використовуйте «крапкову» нотацію для доступу до масивів:
 
     $name = $request->input('products.0.name');
 
     $names = $request->input('products.*.name');
 
-You may call the `input` method without any arguments in order to retrieve all of the input values as an associative array:
+Ви можете викликати метод `input` без жодних аргументів, щоб отримати всі вхідні значення у вигляді асоціативного масиву:
 
     $input = $request->input();
 
 <a name="retrieving-input-from-the-query-string"></a>
-#### Retrieving Input From the Query String
+#### Отримання вхідних даних з рядка запиту
 
-While the `input` method retrieves values from the entire request payload (including the query string), the `query` method will only retrieve values from the query string:
+У той час як метод `input` повертає значення з усього корисного навантаження запиту (включно з рядком запиту), метод `query` повертає значення лише з рядка запиту:
 
     $name = $request->query('name');
 
-If the requested query string value data is not present, the second argument to this method will be returned:
+Якщо даних у запитуваному рядку значення запиту немає, буде повернуто другий аргумент цього методу:
 
     $name = $request->query('name', 'Helen');
 
-You may call the `query` method without any arguments in order to retrieve all of the query string values as an associative array:
+Ви можете викликати метод `query` без жодних аргументів, щоб отримати всі значення рядка запиту у вигляді асоціативного масиву:
 
     $query = $request->query();
 
 <a name="retrieving-json-input-values"></a>
-#### Retrieving JSON Input Values
+#### Отримання вхідних значень JSON
 
-When sending JSON requests to your application, you may access the JSON data via the `input` method as long as the `Content-Type` header of the request is properly set to `application/json`. You may even use "dot" syntax to retrieve values that are nested within JSON arrays / objects:
+Надсилаючи JSON-запити до вашого додатку, ви можете отримати доступ до JSON-даних за допомогою методу `input`, якщо в заголовку `Content-Type` запиту правильно встановлено значення `application/json`. Ви навіть можете використовувати «крапковий» синтаксис для отримання значень, вкладених у масиви/об'єкти JSON:
 
     $name = $request->input('user.name');
 
 <a name="retrieving-stringable-input-values"></a>
-#### Retrieving Stringable Input Values
+#### Отримання рядкових вхідних значень
 
-Instead of retrieving the request's input data as a primitive `string`, you may use the `string` method to retrieve the request data as an instance of [`Illuminate\Support\Stringable`](/docs/{{version}}/helpers#fluent-strings):
+Замість того, щоб отримувати вхідні дані запиту як примітивний `string`, ви можете використовувати метод `string` для отримання даних запиту як екземпляр [`Illuminate\Support\Stringable`](/docs/{{version}}/helpers#fluent-strings):
 
     $name = $request->string('name')->trim();
 
 <a name="retrieving-boolean-input-values"></a>
-#### Retrieving Boolean Input Values
+#### Отримання булевих вхідних значень
 
-When dealing with HTML elements like checkboxes, your application may receive "truthy" values that are actually strings. For example, "true" or "on". For convenience, you may use the `boolean` method to retrieve these values as booleans. The `boolean` method returns `true` for 1, "1", true, "true", "on", and "yes". All other values will return `false`:
+При роботі з елементами HTML, такими як прапорці, ваша програма може отримувати «істинні» значення, які насправді є рядками. Наприклад, «true» або «on». Для зручності ви можете використовувати метод `boolean` для отримання цих значень як булевих. Метод `boolean` повертає значення `true` для 1, «1», true, «true», «on» і «yes». Для всіх інших значень повертається `false`:
 
     $archived = $request->boolean('archived');
 
 <a name="retrieving-date-input-values"></a>
-#### Retrieving Date Input Values
+#### Отримання вхідних значень дати
 
-For convenience, input values containing dates / times may be retrieved as Carbon instances using the `date` method. If the request does not contain an input value with the given name, `null` will be returned:
+Для зручності вхідні значення, що містять дати/час, можуть бути отримані як екземпляри Carbon за допомогою методу `date`. Якщо запит не містить вхідного значення з такою назвою, буде повернуто `null`:
 
     $birthday = $request->date('birthday');
 
-The second and third arguments accepted by the `date` method may be used to specify the date's format and timezone, respectively:
+Другий і третій аргументи, що приймаються методом `date`, можуть бути використані для вказівки формату дати і часового поясу відповідно:
 
     $elapsed = $request->date('elapsed', '!H:i', 'Europe/Madrid');
 
-If the input value is present but has an invalid format, an `InvalidArgumentException` will be thrown; therefore, it is recommended that you validate the input before invoking the `date` method.
+Якщо вхідне значення присутнє, але має невірний формат, буде згенеровано виключення `InvalidArgumentException`; тому рекомендується перевіряти вхідні дані перед викликом методу `date`.
 
 <a name="retrieving-enum-input-values"></a>
-#### Retrieving Enum Input Values
+#### Отримання вхідних значень перечислення
 
-Input values that correspond to [PHP enums](https://www.php.net/manual/en/language.types.enumerations.php) may also be retrieved from the request. If the request does not contain an input value with the given name or the enum does not have a backing value that matches the input value, `null` will be returned. The `enum` method accepts the name of the input value and the enum class as its first and second arguments:
+Із запиту також можуть бути отримані вхідні значення, які відповідають [перелікам PHP](https://www.php.net/manual/en/language.types.enumerations.php). Якщо запит не містить вхідного значення з вказаним іменем або перерахування не має відповідного вхідному значенню опорного значення, буде повернуто `null`. Метод `enum` приймає ім'я вхідного значення та клас зчислення як перший та другий аргументи:
 
     use App\Enums\Status;
 
     $status = $request->enum('status', Status::class);
 
 <a name="retrieving-input-via-dynamic-properties"></a>
-#### Retrieving Input via Dynamic Properties
+#### Отримання вхідних даних за допомогою динамічних властивостей
 
-You may also access user input using dynamic properties on the `Illuminate\Http\Request` instance. For example, if one of your application's forms contains a `name` field, you may access the value of the field like so:
+Ви також можете отримати доступ до даних користувача за допомогою динамічних властивостей екземпляра `Illuminate\Http\Request`. Наприклад, якщо одна з форм вашого додатку містить поле `name`, ви можете отримати доступ до значення цього поля таким чином:
 
     $name = $request->name;
 
-When using dynamic properties, Laravel will first look for the parameter's value in the request payload. If it is not present, Laravel will search for the field in the matched route's parameters.
+При використанні динамічних властивостей Laravel спочатку шукає значення параметра в корисному навантаженні запиту. Якщо його там немає, Laravel шукатиме поле у параметрах відповідного маршруту.
 
 <a name="retrieving-a-portion-of-the-input-data"></a>
-#### Retrieving a Portion of the Input Data
+#### Отримання частини вхідних даних
 
-If you need to retrieve a subset of the input data, you may use the `only` and `except` methods. Both of these methods accept a single `array` or a dynamic list of arguments:
+Якщо вам потрібно отримати підмножину вхідних даних, ви можете використовувати методи `only` та `except`. Обидва ці методи приймають один `масив` або динамічний список аргументів:
 
     $input = $request->only(['username', 'password']);
 
@@ -362,36 +362,36 @@ If you need to retrieve a subset of the input data, you may use the `only` and `
     $input = $request->except('credit_card');
 
 > [!WARNING]  
-> The `only` method returns all of the key / value pairs that you request; however, it will not return key / value pairs that are not present on the request.
+> Метод `only` повертає всі пари ключ/значення, які ви запитуєте; однак він не повертає пари ключ/значення, яких немає у запиті.
 
 <a name="input-presence"></a>
-### Input Presence
+### Присутність на вході
 
-You may use the `has` method to determine if a value is present on the request. The `has` method returns `true` if the value is present on the request:
+Ви можете використовувати метод `has`, щоб визначити, чи присутнє значення в запиті. Метод `has` повертає значення `true`, якщо значення присутнє у запиті:
 
     if ($request->has('name')) {
         // ...
     }
 
-When given an array, the `has` method will determine if all of the specified values are present:
+При отриманні масиву метод `has` визначить, чи всі задані значення є присутніми:
 
     if ($request->has(['name', 'email'])) {
         // ...
     }
 
-The `hasAny` method returns `true` if any of the specified values are present:
+Метод `hasAny` повертає значення `true`, якщо будь-яке з вказаних значень присутнє:
 
     if ($request->hasAny(['name', 'email'])) {
         // ...
     }
 
-The `whenHas` method will execute the given closure if a value is present on the request:
+Метод `whenHas` виконає задане закриття, якщо значення присутнє у запиті:
 
     $request->whenHas('name', function (string $input) {
         // ...
     });
 
-A second closure may be passed to the `whenHas` method that will be executed if the specified value is not present on the request:
+Друге закриття може бути передано до методу `whenHas`, який буде виконано, якщо вказане значення відсутнє у запиті:
 
     $request->whenHas('name', function (string $input) {
         // The "name" value is present...
@@ -399,25 +399,25 @@ A second closure may be passed to the `whenHas` method that will be executed if 
         // The "name" value is not present...
     });
 
-If you would like to determine if a value is present on the request and is not an empty string, you may use the `filled` method:
+Якщо ви хочете визначити, чи присутнє значення в запиті і чи не є воно порожнім рядком, ви можете використати метод `filled`:
 
     if ($request->filled('name')) {
         // ...
     }
 
-The `anyFilled` method returns `true` if any of the specified values is not an empty string:
+Метод `anyFilled` повертає значення `true`, якщо жодне з вказаних значень не є порожнім рядком:
 
     if ($request->anyFilled(['name', 'email'])) {
         // ...
     }
 
-The `whenFilled` method will execute the given closure if a value is present on the request and is not an empty string:
+Метод `whenFilled` виконає задане закриття, якщо значення присутнє в запиті і не є порожнім рядком:
 
     $request->whenFilled('name', function (string $input) {
         // ...
     });
 
-A second closure may be passed to the `whenFilled` method that will be executed if the specified value is not "filled":
+Друге закриття може бути передано до методу `whenFilled`, який буде виконано, якщо вказане значення не буде «заповнене»:
 
     $request->whenFilled('name', function (string $input) {
         // The "name" value is filled...
@@ -425,7 +425,7 @@ A second closure may be passed to the `whenFilled` method that will be executed 
         // The "name" value is not filled...
     });
 
-To determine if a given key is absent from the request, you may use the `missing` and `whenMissing` methods:
+Щоб визначити, чи відсутній ключ у запиті, ви можете використовувати методи `missing` та `whenMissing`:
 
     if ($request->missing('name')) {
         // ...
@@ -438,38 +438,38 @@ To determine if a given key is absent from the request, you may use the `missing
     });
 
 <a name="merging-additional-input"></a>
-### Merging Additional Input
+### Об'єднання додаткових вхідних даних
 
-Sometimes you may need to manually merge additional input into the request's existing input data. To accomplish this, you may use the `merge` method. If a given input key already exists on the request, it will be overwritten by the data provided to the `merge` method:
+Іноді вам може знадобитися вручну об'єднати додаткові вхідні дані з наявними у запиті. Для цього ви можете скористатися методом `merge`. Якщо заданий вхідний ключ вже існує у запиті, він буде замінений даними, наданими методу `merge`:
 
     $request->merge(['votes' => 0]);
 
-The `mergeIfMissing` method may be used to merge input into the request if the corresponding keys do not already exist within the request's input data:
+Метод `mergeIfMissing` можна використовувати для об'єднання вхідних даних у запиті, якщо відповідні ключі ще не існують у вхідних даних запиту:
 
     $request->mergeIfMissing(['votes' => 0]);
 
 <a name="old-input"></a>
-### Old Input
+### Старий вхід
 
-Laravel allows you to keep input from one request during the next request. This feature is particularly useful for re-populating forms after detecting validation errors. However, if you are using Laravel's included [validation features](/docs/{{version}}/validation), it is possible that you will not need to manually use these session input flashing methods directly, as some of Laravel's built-in validation facilities will call them automatically.
+Laravel дозволяє зберігати дані з одного запиту під час наступного запиту. Ця функція особливо корисна для повторного заповнення форм після виявлення помилок валідації. Однак, якщо ви використовуєте включені в Laravel [функції валідації](/docs/{{version}}/validation), можливо, вам не потрібно буде вручну використовувати ці методи збереження даних сеансу безпосередньо, оскільки деякі вбудовані засоби валідації Laravel викликають їх автоматично.
 
 <a name="flashing-input-to-the-session"></a>
-#### Flashing Input to the Session
+#### Блимає вхід до сесії
 
-The `flash` method on the `Illuminate\Http\Request` class will flash the current input to the [session](/docs/{{version}}/session) so that it is available during the user's next request to the application:
+Метод `flash` у класі `Illuminate\Http\Request` спалахне поточним введенням у [session](/docs/{{version}}/session), щоб воно було доступне під час наступного запиту користувача до програми:
 
     $request->flash();
 
-You may also use the `flashOnly` and `flashExcept` methods to flash a subset of the request data to the session. These methods are useful for keeping sensitive information such as passwords out of the session:
+Ви також можете використовувати методи `flashOnly` і `flashExcept` для запису підмножини даних запиту до сеансу. Ці методи корисні для збереження конфіденційної інформації, наприклад, паролів, поза сеансом:
 
     $request->flashOnly(['username', 'email']);
 
     $request->flashExcept('password');
 
 <a name="flashing-input-then-redirecting"></a>
-#### Flashing Input Then Redirecting
+#### Миготливий вхід, а потім перенаправлення
 
-Since you often will want to flash input to the session and then redirect to the previous page, you may easily chain input flashing onto a redirect using the `withInput` method:
+Оскільки вам часто потрібно буде спалахувати введення в сеансі, а потім перенаправляти на попередню сторінку, ви можете легко зв'язати спалахування введення з перенаправленням за допомогою методу `withInput`:
 
     return redirect('form')->withInput();
 
@@ -480,34 +480,34 @@ Since you often will want to flash input to the session and then redirect to the
     );
 
 <a name="retrieving-old-input"></a>
-#### Retrieving Old Input
+#### Отримання старих даних
 
-To retrieve flashed input from the previous request, invoke the `old` method on an instance of `Illuminate\Http\Request`. The `old` method will pull the previously flashed input data from the [session](/docs/{{version}}/session):
+Щоб отримати дані з попереднього запиту, викличте метод `old` для екземпляра `Illuminate\Http\Request`. Метод `old` витягне попередні дані з [session](/docs/{{version}}/session):
 
     $username = $request->old('username');
 
-Laravel also provides a global `old` helper. If you are displaying old input within a [Blade template](/docs/{{version}}/blade), it is more convenient to use the `old` helper to repopulate the form. If no old input exists for the given field, `null` will be returned:
+Laravel також надає глобальний помічник `old`. Якщо ви відображаєте старі дані у шаблоні [Blade template](/docs/{{version}}/blade), зручніше використовувати `old` для повторного заповнення форми. Якщо для даного поля не існує старих даних, буде повернуто `null`:
 
     <input type="text" name="username" value="{{ old('username') }}">
 
 <a name="cookies"></a>
-### Cookies
+### Куки.
 
 <a name="retrieving-cookies-from-requests"></a>
-#### Retrieving Cookies From Requests
+#### Отримання файлів cookie із запитів
 
-All cookies created by the Laravel framework are encrypted and signed with an authentication code, meaning they will be considered invalid if they have been changed by the client. To retrieve a cookie value from the request, use the `cookie` method on an `Illuminate\Http\Request` instance:
+Всі файли cookie, створені фреймворком Laravel, зашифровані і підписані кодом автентифікації, що означає, що вони будуть вважатися недійсними, якщо будуть змінені клієнтом. Щоб отримати значення cookie із запиту, використовуйте метод `cookie` в екземплярі `Illuminate\Http\Request`:
 
     $value = $request->cookie('name');
 
 <a name="input-trimming-and-normalization"></a>
-## Input Trimming and Normalization
+## Обрізання та нормалізація вхідних даних
 
-By default, Laravel includes the `Illuminate\Foundation\Http\Middleware\TrimStrings` and `Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull` middleware in your application's global middleware stack. These middleware will automatically trim all incoming string fields on the request, as well as convert any empty string fields to `null`. This allows you to not have to worry about these normalization concerns in your routes and controllers.
+За замовчуванням Laravel включає проміжне програмне забезпечення `Illuminate\Foundation\Http\Middleware\TrimStrings` та `Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull` у глобальний стек проміжного програмного забезпечення вашого додатку. Це проміжне програмне забезпечення буде автоматично обрізати всі вхідні рядкові поля в запиті, а також перетворювати всі порожні рядкові поля в `null`. Це дозволяє вам не турбуватися про нормалізацію у ваших маршрутах і контролерах.
 
-#### Disabling Input Normalization
+#### Вимкнення нормалізації вводу
 
-If you would like to disable this behavior for all requests, you may remove the two middleware from your application's middleware stack by invoking the `$middleware->remove` method in your application's `bootstrap/app.php` file:
+Якщо ви хочете вимкнути цю поведінку для всіх запитів, ви можете видалити обидва проміжні модулі зі стека проміжного програмного забезпечення вашого додатка, викликавши метод `$middleware->remove` у файлі `bootstrap/app.php` вашого додатка:
 
     use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
     use Illuminate\Foundation\Http\Middleware\TrimStrings;
@@ -519,7 +519,7 @@ If you would like to disable this behavior for all requests, you may remove the 
         ]);
     })
 
-If you would like to disable string trimming and empty string conversion for a subset of requests to your application, you may use the `trimStrings` and `convertEmptyStringsToNull` middleware methods within your application's `bootstrap/app.php` file. Both methods accept an array of closures, which should return `true` or `false` to indicate whether input normalization should be skipped:
+Якщо ви хочете вимкнути обрізання рядків та перетворення порожніх рядків для підмножини запитів до вашого додатку, ви можете скористатися методами проміжного програмного забезпечення `trimStrings` та `convertEmptyStringsToNull` у файлі `bootstrap/app.php` вашого додатку. Обидва методи приймають масив закриттів, які мають повертати значення `true` або `false`, щоб вказати, чи слід пропустити нормалізацію вхідних даних:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->convertEmptyStringsToNull(except: [
@@ -532,74 +532,74 @@ If you would like to disable string trimming and empty string conversion for a s
     })
 
 <a name="files"></a>
-## Files
+## Файли
 
 <a name="retrieving-uploaded-files"></a>
-### Retrieving Uploaded Files
+### Отримання завантажених файлів
 
-You may retrieve uploaded files from an `Illuminate\Http\Request` instance using the `file` method or using dynamic properties. The `file` method returns an instance of the `Illuminate\Http\UploadedFile` class, which extends the PHP `SplFileInfo` class and provides a variety of methods for interacting with the file:
+Ви можете отримати завантажені файли з екземпляра `Illuminate\Http\Request` за допомогою методу `file` або за допомогою динамічних властивостей. Метод `file` повертає екземпляр класу `Illuminate\Http\UploadedFile`, який розширює клас PHP `SplFileInfo` і надає різноманітні методи для взаємодії з файлом:
 
     $file = $request->file('photo');
 
     $file = $request->photo;
 
-You may determine if a file is present on the request using the `hasFile` method:
+Ви можете визначити наявність файлу в запиті за допомогою методу `hasFile`:
 
     if ($request->hasFile('photo')) {
         // ...
     }
 
 <a name="validating-successful-uploads"></a>
-#### Validating Successful Uploads
+#### Перевірка успішних завантажень
 
-In addition to checking if the file is present, you may verify that there were no problems uploading the file via the `isValid` method:
+На додаток до перевірки наявності файлу, ви можете перевірити, чи не було проблем із завантаженням файлу за допомогою методу `isValid`:
 
     if ($request->file('photo')->isValid()) {
         // ...
     }
 
 <a name="file-paths-extensions"></a>
-#### File Paths and Extensions
+#### Шляхи та розширення файлів
 
-The `UploadedFile` class also contains methods for accessing the file's fully-qualified path and its extension. The `extension` method will attempt to guess the file's extension based on its contents. This extension may be different from the extension that was supplied by the client:
+Клас `UploadedFile` також містить методи для доступу до повного шляху до файлу та його розширення. Метод `extension` спробує визначити розширення файлу на основі його вмісту. Це розширення може відрізнятися від розширення, яке було надано клієнтом:
 
     $path = $request->photo->path();
 
     $extension = $request->photo->extension();
 
 <a name="other-file-methods"></a>
-#### Other File Methods
+#### Інші файлові методи
 
-There are a variety of other methods available on `UploadedFile` instances. Check out the [API documentation for the class](https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php) for more information regarding these methods.
+Існує безліч інших методів, доступних для екземплярів `UploadedFile`. Зверніться до [API документації для класу](https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php) для отримання додаткової інформації про ці методи.
 
 <a name="storing-uploaded-files"></a>
-### Storing Uploaded Files
+### Зберігання завантажених файлів
 
-To store an uploaded file, you will typically use one of your configured [filesystems](/docs/{{version}}/filesystem). The `UploadedFile` class has a `store` method that will move an uploaded file to one of your disks, which may be a location on your local filesystem or a cloud storage location like Amazon S3.
+Для зберігання завантаженого файлу ви зазвичай використовуєте одну з налаштованих вами [файлових систем](/docs/{{version}}/filesystem). Клас `UploadedFile` має метод `store`, який переміщує завантажений файл на один з ваших дисків, що може бути місцем у вашій локальній файловій системі або хмарному сховищі, наприклад, Amazon S3.
 
-The `store` method accepts the path where the file should be stored relative to the filesystem's configured root directory. This path should not contain a filename, since a unique ID will automatically be generated to serve as the filename.
+Метод `store` приймає шлях, де має бути збережено файл відносно налаштованого кореневого каталогу файлової системи. Цей шлях не повинен містити ім'я файлу, оскільки замість нього буде автоматично згенеровано унікальний ідентифікатор.
 
-The `store` method also accepts an optional second argument for the name of the disk that should be used to store the file. The method will return the path of the file relative to the disk's root:
+Метод `store` також приймає необов'язковий другий аргумент для назви диска, на якому слід зберігати файл. Метод поверне шлях до файлу відносно кореня диска:
 
     $path = $request->photo->store('images');
 
     $path = $request->photo->store('images', 's3');
 
-If you do not want a filename to be automatically generated, you may use the `storeAs` method, which accepts the path, filename, and disk name as its arguments:
+Якщо ви не бажаєте, щоб ім'я файлу генерувалося автоматично, ви можете скористатися методом `storeAs`, який приймає шлях, ім'я файлу та ім'я диска як аргументи:
 
     $path = $request->photo->storeAs('images', 'filename.jpg');
 
     $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 
 > [!NOTE]  
-> For more information about file storage in Laravel, check out the complete [file storage documentation](/docs/{{version}}/filesystem).
+> Для отримання додаткової інформації про зберігання файлів у Laravel перегляньте повну [документацію про зберігання файлів](/docs/{{version}}/filesystem).
 
 <a name="configuring-trusted-proxies"></a>
-## Configuring Trusted Proxies
+## Налаштування довірених проксі-серверів
 
-When running your applications behind a load balancer that terminates TLS / SSL certificates, you may notice your application sometimes does not generate HTTPS links when using the `url` helper. Typically this is because your application is being forwarded traffic from your load balancer on port 80 and does not know it should generate secure links.
+Під час запуску ваших додатків за балансувальником навантаження, який припиняє дію сертифікатів TLS / SSL, ви можете помітити, що ваш додаток іноді не генерує HTTPS-посилання при використанні допоміжного засобу `url`. Зазвичай це відбувається тому, що ваш додаток отримує трафік від балансувальника навантаження через порт 80 і не знає, що він повинен генерувати безпечні посилання.
 
-To solve this, you may enable the `Illuminate\Http\Middleware\TrustProxies` middleware that is included in your Laravel application, which allows you to quickly customize the load balancers or proxies that should be trusted by your application. Your trusted proxies should be specified using the `trustProxies` middleware method in your application's `bootstrap/app.php` file:
+Щоб вирішити цю проблему, ви можете увімкнути проміжне програмне забезпечення `Illuminate\Http\Middleware\TrustProxies`, яке входить до складу вашого додатку Laravel, що дозволить вам швидко налаштувати балансувальники навантаження або проксі-сервери, яким має довіряти ваш додаток. Довірені проксі-сервери повинні бути вказані за допомогою методу `trustProxies` у файлі `bootstrap/app.php` вашого додатку:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: [
@@ -608,7 +608,7 @@ To solve this, you may enable the `Illuminate\Http\Middleware\TrustProxies` midd
         ]);
     })
 
-In addition to configuring the trusted proxies, you may also configure the proxy headers that should be trusted:
+Окрім налаштування довірених проксі-серверів, ви також можете налаштувати заголовки проксі-серверів, яким слід довіряти:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(headers: Request::HEADER_X_FORWARDED_FOR |
@@ -620,31 +620,31 @@ In addition to configuring the trusted proxies, you may also configure the proxy
     })
 
 > [!NOTE]  
-> If you are using AWS Elastic Load Balancing, your `headers` value should be `Request::HEADER_X_FORWARDED_AWS_ELB`. For more information on the constants that may be used in the `headers` value, check out Symfony's documentation on [trusting proxies](https://symfony.com/doc/7.0/deployment/proxies.html).
+> Якщо ви використовуєте AWS Elastic Load Balancing, ваше значення `headers` має бути `Request::HEADER_X_FORWARDED_AWS_ELB`. Для отримання додаткової інформації про константи, які можна використовувати у значенні `headers`, зверніться до документації Symfony щодо [довірчих проксі-серверів](https://symfony.com/doc/7.0/deployment/proxies.html).
 
 <a name="trusting-all-proxies"></a>
-#### Trusting All Proxies
+#### Довіра до всіх проксі-серверів
 
-If you are using Amazon AWS or another "cloud" load balancer provider, you may not know the IP addresses of your actual balancers. In this case, you may use `*` to trust all proxies:
+Якщо ви використовуєте Amazon AWS або інший «хмарний» провайдер балансувальника навантаження, ви можете не знати IP-адреси ваших реальних балансувальників. У цьому випадку ви можете використовувати `*`, щоб довіряти всім проксі-серверам:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustProxies(at: '*');
     })
 
 <a name="configuring-trusted-hosts"></a>
-## Configuring Trusted Hosts
+## Налаштування довірених хостів
 
-By default, Laravel will respond to all requests it receives regardless of the content of the HTTP request's `Host` header. In addition, the `Host` header's value will be used when generating absolute URLs to your application during a web request.
+За замовчуванням Laravel відповідатиме на всі отримані запити незалежно від вмісту заголовка `Host` HTTP-запиту. Крім того, значення заголовка `Host` буде використовуватися при генерації абсолютних URL-адрес до вашого додатку під час веб-запиту.
 
-Typically, you should configure your web server, such as Nginx or Apache, to only send requests to your application that match a given hostname. However, if you do not have the ability to customize your web server directly and need to instruct Laravel to only respond to certain hostnames, you may do so by enabling the `Illuminate\Http\Middleware\TrustHosts` middleware for your application.
+Зазвичай, ви повинні налаштувати ваш веб-сервер, наприклад, Nginx або Apache, так, щоб він надсилав лише ті запити до вашого додатку, які відповідають заданому імені хоста. Однак, якщо у вас немає можливості налаштувати веб-сервер безпосередньо і вам потрібно вказати Laravel відповідати тільки на певні імена хостів, ви можете зробити це, увімкнувши проміжне програмне забезпечення `Illuminate\Http\Middleware\TrustHosts` для вашого додатку.
 
-To enable the `TrustHosts` middleware, you should invoke the `trustHosts` middleware method in your application's `bootstrap/app.php` file. Using the `at` argument of this method, you may specify the hostnames that your application should respond to. Incoming requests with other `Host` headers will be rejected:
+Щоб увімкнути проміжне програмне забезпечення `TrustHosts`, вам слід викликати метод проміжного програмного забезпечення `trustHosts` у файлі `bootstrap/app.php` вашого додатку. Використовуючи аргумент `at` цього методу, ви можете вказати імена хостів, на які повинен відповідати ваш додаток. Вхідні запити з іншими заголовками `Host` будуть відхилені:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustHosts(at: ['laravel.test']);
     })
 
-By default, requests coming from subdomains of the application's URL are also automatically trusted. If you would like to disable this behavior, you may use the `subdomains` argument:
+За замовчуванням, запити, що надходять із субдоменів URL-адреси програми, також автоматично вважаються довіреними. Якщо ви хочете вимкнути таку поведінку, ви можете використовувати аргумент `субдомени`:
 
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->trustHosts(at: ['laravel.test'], subdomains: false);
