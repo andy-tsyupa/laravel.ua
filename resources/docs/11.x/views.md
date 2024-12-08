@@ -2,7 +2,7 @@
 
 - [Вступ](#introduction)
     - [Написання представлень у React / Vue](#writing-views-in-react-or-vue)
-- [Створення та рендеринг подань](#creating-and-rendering-views)
+- [Створення та рендеринг представлень](#creating-and-rendering-views)
     - [Вкладені каталоги представлень](#nested-view-directories)
     - [Створення першого доступного подання](#creating-the-first-available-view)
     - [Визначення того, чи існує подання](#determining-if-a-view-exists)
@@ -21,7 +21,6 @@
 
 ```blade
 <!-- Представлення зберігається в resources/views/greeting.blade.php -->
-
 <html>
     <body>
         <h1>Hello, {{ $name }}</h1>
@@ -46,7 +45,7 @@
 Наш вітерець і струмінь [стартові набори](/docs/{{version}}/starter-kits) дасть вам чудову відправну точку для створення вашого наступного додатку на Laravel на основі Inertia. Крім того, в розділі [Laravel Bootcamp](https://bootcamp.laravel.com) надає повну демонстрацію створення Laravel-додатків на основі Inertia, включаючи приклади на Vue та React.
 
 <a name="creating-and-rendering-views"></a>
-## Створення та рендеринг подань
+## Створення та рендеринг представлень
 
 Ви можете створити подання, розмістивши файл з розширенням `.blade.php` у директорії `resources/views` вашого додатку або за допомогою команди Artisan `make:view`:
 
