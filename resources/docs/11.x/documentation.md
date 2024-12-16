@@ -25,7 +25,7 @@
     - [Blade шаблони](/docs/{{version}}/blade)
     - [Збірка ресурсів](/docs/{{version}}/vite)
     - [URL Generation](/docs/{{version}}/urls)
-    - [Session](/docs/{{version}}/session)
+    - [HTTP Сесії](/docs/{{version}}/session)
     - [Validation](/docs/{{version}}/validation)
     - [Error Handling](/docs/{{version}}/errors)
     - [Logging](/docs/{{version}}/logging)

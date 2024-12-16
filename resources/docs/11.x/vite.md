@@ -372,7 +372,7 @@ export default defineConfig({
 });
 ```
 
-Ви повинні переконатися, що будь-які файли, що містять JSX, мають розширення `.jsx` або `.tsx`, пам'ятаючи про необхідність оновлення вашої точки входу, якщо це потрібно, як показано [вище] (#configuring-vite).
+Ви повинні переконатися, що будь-які файли, що містять JSX, мають розширення `.jsx` або `.tsx`, пам'ятаючи про необхідність оновлення вашої точки входу, якщо це потрібно, як показано [вище](#configuring-vite).
 
 Вам також потрібно буде включити додаткову директиву `@viteReactRefresh` разом із вашою поточною директивою `@vite` у Blade.
 
@@ -759,7 +759,7 @@ php artisan inertia:start-ssr
 <a name="content-security-policy-csp-nonce"></a>
 ### Політика безпеки вмісту (CSP) Nonce
 
-Якщо ви хочете ввімкнути атрибут [`nonce`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) у ваших тегах script і style як частину [ політики безпеки контенту (Content Security Policy)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), ви можете згенерувати або вказати nonce, використовуючи метод `useCspNonce` всередині власного [middleware](/docs/{{version}}}/middleware):
+Якщо ви хочете ввімкнути атрибут [`nonce`](https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/nonce) у ваших тегах script і style як частину [ політики безпеки контенту (Content Security Policy)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP), ви можете згенерувати або вказати nonce, використовуючи метод `useCspNonce` всередині власного [посередників](/docs/{{version}}}/middleware):
 
 ```php
 <?php
@@ -803,7 +803,7 @@ Vite::useCspNonce($nonce);
 ```
 
 <a name="subresource-integrity-sri"></a>
-### Subresource Integrity (SRI) (Wелостность подресурсов)
+### Subresource Integrity (SRI) (Цілісність підресурсів)
 
 Якщо ваш маніфест Vite включає хеші `integrity` для ваших ресурсів, Laravel автоматично додасть атрибут `integrity` до всіх тегів script і style, які він генерує, щоб забезпечити [цілісність підресурсів](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity). За замовчуванням Vite не включає хеш `integrity` у свій маніфест, але ви можете ввімкнути його, встановивши плагін [`vite-plugin-manifest-sri`](https://www.npmjs.com/package/vite-plugin-manifest-sri) з NPM:
 ```shell

@@ -1,4 +1,4 @@
-# URL Generation
+# URL генерація
 
 - [Вступ](#introduction)
 - [Основи](#the-basics)
