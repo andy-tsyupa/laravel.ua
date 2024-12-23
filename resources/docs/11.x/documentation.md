@@ -24,9 +24,9 @@
     - [Представлення](/docs/{{version}}/views)
     - [Blade шаблони](/docs/{{version}}/blade)
     - [Збірка ресурсів](/docs/{{version}}/vite)
-    - [URL Generation](/docs/{{version}}/urls)
+    - [URL генерація](/docs/{{version}}/urls)
     - [HTTP Сесії](/docs/{{version}}/session)
-    - [Validation](/docs/{{version}}/validation)
+    - [Валідація](/docs/{{version}}/validation)
     - [Error Handling](/docs/{{version}}/errors)
     - [Logging](/docs/{{version}}/logging)
 - ## Digging Deeper
