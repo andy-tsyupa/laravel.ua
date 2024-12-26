@@ -1,67 +1,63 @@
-# Logging
+# Логування
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-    - [Available Channel Drivers](#available-channel-drivers)
-    - [Channel Prerequisites](#channel-prerequisites)
-    - [Logging Deprecation Warnings](#logging-deprecation-warnings)
-- [Building Log Stacks](#building-log-stacks)
-- [Writing Log Messages](#writing-log-messages)
-    - [Contextual Information](#contextual-information)
-    - [Writing to Specific Channels](#writing-to-specific-channels)
-- [Monolog Channel Customization](#monolog-channel-customization)
-    - [Customizing Monolog for Channels](#customizing-monolog-for-channels)
-    - [Creating Monolog Handler Channels](#creating-monolog-handler-channels)
-    - [Creating Custom Channels via Factories](#creating-custom-channels-via-factories)
-- [Tailing Log Messages Using Pail](#tailing-log-messages-using-pail)
-    - [Installation](#pail-installation)
-    - [Usage](#pail-usage)
-    - [Filtering Logs](#pail-filtering-logs)
-
+- [Вступ](#introduction)
+- [Конфігурування](#configuration)
+    - [Доступні драйвери каналу](#available-channel-drivers)
+    - [Налаштування імені каналу](#channel-prerequisites)
+    - [Логування попереджень про застарівання](#logging-deprecation-warnings)
+- [Побудова стека журналів](#building-log-stacks)
+- [Запис повідомлень журналу](#writing-log-messages)
+    - [Контекстна інформація](#contextual-information)
+    - [Запис у певні канали](#writing-to-specific-channels)
+- [Налаштування каналу Monolog](#monolog-channel-customization)
+    - [Налаштування Monolog для каналів](#customizing-monolog-for-channels)
+    - [Створення обробника каналів Monolog](#creating-monolog-handler-channels)
+    - [Створення каналів через фабрики](#creating-custom-channels-via-factories)
+- [Перегляд повідомлення журналу за допомогою Pail](#tailing-log-messages-using-pail)
+    - [Установка](#pail-installation)
+    - [Використання](#pail-usage)
+    - [Фільтрація логів](#pail-filtering-logs)
+    
 <a name="introduction"></a>
-## Introduction
+## Вступ
 
-To help you learn more about what's happening within your application, Laravel provides robust logging services that allow you to log messages to files, the system error log, and even to Slack to notify your entire team.
+Щоб допомогти вам дізнатися більше про те, що відбувається у вашому додатку, Laravel пропонує надійні служби ведення журналу, які дають змогу записувати повідомлення у файли, журнал системних помилок і навіть у Slack, щоб повідомити всю вашу команду.
 
-Laravel logging is based on "channels". Each channel represents a specific way of writing log information. For example, the `single` channel writes log files to a single log file, while the `slack` channel sends log messages to Slack. Log messages may be written to multiple channels based on their severity.
+Ведення журналу Laravel засноване на «каналах». Кожен канал являє собою певний спосіб запису інформації журналу. Наприклад, канал `single` записує файли журналу в один файл журналу, а канал `slack` відправляє повідомлення журналу в Slack. Повідомлення журналу можуть бути записані в кілька каналів залежно від їхньої серйозності.
 
-Under the hood, Laravel utilizes the [Monolog](https://github.com/Seldaek/monolog) library, which provides support for a variety of powerful log handlers. Laravel makes it a cinch to configure these handlers, allowing you to mix and match them to customize your application's log handling.
+Під капотом Laravel використовує бібліотеку [Monolog](https://github.com/Seldaek/monolog), яка забезпечує підтримку безлічі потужних обробників журналів. Laravel спрощує налаштування цих обробників, даючи вам змогу змішувати і зіставляти їх для налаштування обробки журналів вашої програми.
 
 <a name="configuration"></a>
-## Configuration
+## Конфігурування
 
-All of the configuration options that control your application's logging behavior are housed in the `config/logging.php` configuration file. This file allows you to configure your application's log channels, so be sure to review each of the available channels and their options. We'll review a few common options below.
+Усі параметри конфігурації, які керують веденням журналу вашого додатка, розміщені у файлі конфігурації `config/logging.php`. Цей файл дає змогу вам налаштовувати канали журналу вашого застосунку, тому обов'язково перегляньте кожен із доступних каналів та їхні параметри. Нижче ми розглянемо кілька поширених варіантів.
 
-By default, Laravel will use the `stack` channel when logging messages. The `stack` channel is used to aggregate multiple log channels into a single channel. For more information on building stacks, check out the [documentation below](#building-log-stacks).
+За замовчуванням Laravel буде використовувати канал `stack` під час реєстрації повідомлень. Канал `stack` використовується для об'єднання декількох каналів журналу в один канал. Для отримання додаткової інформації про побудову стеків ознайомтеся з [документацією нижче](#building-log-stacks).
 
 <a name="available-channel-drivers"></a>
-### Available Channel Drivers
+### Доступні драйвери каналу
 
-Each log channel is powered by a "driver". The driver determines how and where the log message is actually recorded. The following log channel drivers are available in every Laravel application. An entry for most of these drivers is already present in your application's `config/logging.php` configuration file, so be sure to review this file to become familiar with its contents:
+Кожен канал журналу працює через «драйвер». Драйвер визначає, як і де фактично записується повідомлення журналу. Наступні драйвери каналу журналу доступні в кожному додатку Laravel. Запис для більшості цих драйверів уже присутній у файлі конфігурації вашого додатка `config/logging.php`, тому обов'язково перегляньте цей файл, щоб ознайомитися з його вмістом:
 
-<div class="overflow-auto">
+| Ім'я         | Опис                                                                       |
+| ------------ | ------------------------------------------------------------------------------ |
+| `custom`     | Драйвер, який викликає зазначену фабрику для створення каналу.              |
+| `daily`      | Драйвер Monolog на основі `RotatingFileHandler` зі щоденною ротацією.       |
+| `errorlog`   | Драйвер Monolog на основі `ErrorLogHandler`.                                   |
+| `monolog`    | Драйвер фабрики Monolog, що використовує будь-який підтримуваний Monolog обробник. |
+| `papertrail` | Драйвер Monolog на основі `SyslogUdpHandler`.                                |
+| `single`     | Канал на основі одного файлу або шляху (`StreamHandler`)                        |
+| `slack`      | Драйвер Monolog на основі `SlackWebhookHandler`.                                |
+| `stack`      | Обгортка для полегшення створення «багатоканальних» каналів.                     |
+| `syslog`     | Драйвер Monolog на основі `SyslogHandler`.                                   |
 
-Name | Description
-------------- | -------------
-`custom` | A driver that calls a specified factory to create a channel
-`daily` | A `RotatingFileHandler` based Monolog driver which rotates daily
-`errorlog` | An `ErrorLogHandler` based Monolog driver
-`monolog` | A Monolog factory driver that may use any supported Monolog handler
-`papertrail` | A `SyslogUdpHandler` based Monolog driver
-`single` | A single file or path based logger channel (`StreamHandler`)
-`slack` | A `SlackWebhookHandler` based Monolog driver
-`stack` | A wrapper to facilitate creating "multi-channel" channels
-`syslog` | A `SyslogHandler` based Monolog driver
-
-</div>
-
-> [!NOTE]  
-> Check out the documentation on [advanced channel customization](#monolog-channel-customization) to learn more about the `monolog` and `custom` drivers.
+> [!NOTE]
+> Ознайомтеся з документацією щодо [просунутої кастомізації каналів](#monolog-channel-customization), щоб дізнатися більше про драйвери `monolog` і `custom`.
 
 <a name="configuring-the-channel-name"></a>
-#### Configuring the Channel Name
+#### Налаштування імені каналу
 
-By default, Monolog is instantiated with a "channel name" that matches the current environment, such as `production` or `local`. To change this value, you may add a `name` option to your channel's configuration:
+За замовчуванням екземпляр Monolog створюється з «ім'ям каналу», яке відповідає поточному середовищу, наприклад, `production` або `local`. Щоб змінити це значення, додайте параметр `name` у конфігурацію вашого каналу:
 
     'stack' => [
         'driver' => 'stack',
@@ -70,49 +66,41 @@ By default, Monolog is instantiated with a "channel name" that matches the curre
     ],
 
 <a name="channel-prerequisites"></a>
-### Channel Prerequisites
+### Попередня підготовка каналу
 
 <a name="configuring-the-single-and-daily-channels"></a>
-#### Configuring the Single and Daily Channels
+#### Конфігурування каналів Single і Daily
 
-The `single` and `daily` channels have three optional configuration options: `bubble`, `permission`, and `locking`.
+Канали (Channels) `single` і `daily` мають три необов'язкові параметри конфігурації: `bubble`, `permission`, і `locking`.
 
-<div class="overflow-auto">
+| Ім'я         | Опис                                                           | За замовчуванням |
+| ------------ | -------------------------------------------------------------- | ------------ |
+| `bubble`     | Чи повинні повідомлення переходити в інші канали після обробки | `true`       |
+| `locking`    | Спробувати заблокувати файл журналу перед записом у нього      | `false`      |
+| `permission` | Права доступу до файлу журналу                                 | `0644`       |
 
-Name | Description | Default
-------------- | ------------- | -------------
-`bubble` | Indicates if messages should bubble up to other channels after being handled | `true`
-`locking` | Attempt to lock the log file before writing to it | `false`
-`permission` | The log file's permissions | `0644`
+Додатково, спосіб зберігання для каналу `daily` можна налаштувати за допомогою змінної середовища `LOG_DAILY_DAYS` або шляхом встановлення параметра конфігурації `days`.
 
-</div>
-
-Additionally, the retention policy for the `daily` channel can be configured via the `LOG_DAILY_DAYS` environment variable or by setting the `days` configuration option.
-
-<div class="overflow-auto">
-
-Name | Description                                                       | Default
-------------- |-------------------------------------------------------------------| -------------
-`days` | The number of days that daily log files should be retained | `7`
-
-</div>
+| Name   | Description                                                             | Default |
+| ------ | ----------------------------------------------------------------------- | ------- |
+| `days` | Кількість днів, протягом яких слід зберігати файли каналу daily.        | `14`    |
 
 <a name="configuring-the-papertrail-channel"></a>
-#### Configuring the Papertrail Channel
+#### Конфігурування каналу Papertrail
 
-The `papertrail` channel requires `host` and `port` configuration options. These may be defined via the `LOG_PAPERTRAIL_URL` and `LOG_PAPERTRAIL_PORT` environment variables. You can obtain these values from [Papertrail](https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-php-apps/#send-events-from-php-app).
+Для каналу `papertrail` потрібні параметри конфігурації `host` і `port`. Їх можна визначити за допомогою змінних середовища `PAPERTRAIL_URL` і `PAPERTRAIL_PORT`. Ці значення можна отримати з [Papertrail](https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-php-apps/#send-events-from-php-app).
 
 <a name="configuring-the-slack-channel"></a>
-#### Configuring the Slack Channel
+#### Конфігурування каналу Slack
 
-The `slack` channel requires a `url` configuration option. This value may be defined via the `LOG_SLACK_WEBHOOK_URL` environment variable. This URL should match a URL for an [incoming webhook](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) that you have configured for your Slack team.
+Для каналу `slack` потрібен параметр конфігурації `url`. Це значення може бути визначено через змінну середовища `LOG_SLACK_WEBHOOK_URL`. Ця URL-адреса повинна відповідати URL-адресі [вхідного веб-хука](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks), який ви налаштували для своєї команди Slack.
 
-By default, Slack will only receive logs at the `critical` level and above; however, you can adjust this using the `LOG_LEVEL` environment variable or by modifying the `level` configuration option within your Slack log channel's configuration array.
+За замовчуванням Slack отримуватиме логи тільки з рівнем `critical` і вище; однак ви можете налаштувати це, використовуючи змінну середовища `LOG_LEVEL` або змінивши параметр конфігурації `level` у масиві вашого драйвера Slack.
 
 <a name="logging-deprecation-warnings"></a>
-### Logging Deprecation Warnings
+### Логування попереджень про застарівання
 
-PHP, Laravel, and other libraries often notify their users that some of their features have been deprecated and will be removed in a future version. If you would like to log these deprecation warnings, you may specify your preferred `deprecations` log channel using the `LOG_DEPRECATIONS_CHANNEL` environment variable, or within your application's `config/logging.php` configuration file:
+PHP, Laravel та інші бібліотеки часто повідомляють своїх користувачів про те, що деякі з їхніх функцій застаріли і будуть видалені в майбутній версії. Якщо ви хочете реєструвати ці попередження про застарілість, ви можете вказати бажаний канал журналу `deprecations`, використовуючи змінну середовища `LOG_DEPRECATIONS_CHANNEL` або у файлі конфігурації вашої програми `config/logging.php`:
 
     'deprecations' => [
         'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),
@@ -123,7 +111,7 @@ PHP, Laravel, and other libraries often notify their users that some of their fe
         // ...
     ]
 
-Or, you may define a log channel named `deprecations`. If a log channel with this name exists, it will always be used to log deprecations:
+Або ви можете визначити канал журналу з іменем `deprecations`. Якщо канал журналу з таким ім'ям існує, він завжди буде використовуватися для реєстрації застарівання:
 
     'channels' => [
         'deprecations' => [
@@ -133,9 +121,9 @@ Or, you may define a log channel named `deprecations`. If a log channel with thi
     ],
 
 <a name="building-log-stacks"></a>
-## Building Log Stacks
+## Побудова стека журналів
 
-As mentioned previously, the `stack` driver allows you to combine multiple channels into a single log channel for convenience. To illustrate how to use log stacks, let's take a look at an example configuration that you might see in a production application:
+Як згадувалося раніше, драйвер `stack` дозволяє для зручності об'єднати кілька каналів в один канал журналу. Щоб проілюструвати, як використовувати стеки журналів, давайте розглянемо приклад конфігурації, яку ви можете побачити в експлуатаційному додатку:
 
 ```php
 'channels' => [
@@ -163,25 +151,25 @@ As mentioned previously, the `stack` driver allows you to combine multiple chann
 ],
 ```
 
-Let's dissect this configuration. First, notice our `stack` channel aggregates two other channels via its `channels` option: `syslog` and `slack`. So, when logging messages, both of these channels will have the opportunity to log the message. However, as we will see below, whether these channels actually log the message may be determined by the message's severity / "level".
+Давайте розберемо цю конфігурацію. По-перше, зверніть увагу, що наш канал `stack` об'єднує два інших канали за допомогою параметра `channels`: `syslog` і ``slack`. Таким чином, під час реєстрації повідомлень обидва канали матимуть можливість реєструвати повідомлення. Однак, як ми побачимо нижче, чи дійсно ці канали реєструють повідомлення, може бути визначено серйозністю / «рівнем» повідомлення.
 
 <a name="log-levels"></a>
-#### Log Levels
+#### Рівні журналу
 
-Take note of the `level` configuration option present on the `syslog` and `slack` channel configurations in the example above. This option determines the minimum "level" a message must be in order to be logged by the channel. Monolog, which powers Laravel's logging services, offers all of the log levels defined in the [RFC 5424 specification](https://tools.ietf.org/html/rfc5424). In descending order of severity, these log levels are: **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info**, and **debug**.
+Зверніть увагу на параметр конфігурації `level`, присутній у конфігураціях каналів `syslog` і ``slack` у наведеному вище прикладі. Ця опція визначає мінімальний «рівень» повідомлення, яке має бути зареєстровано каналом. Monolog, на якому працюють служби ведення журналів Laravel, пропонує всі рівні журналів, визначені в специфікації [RFC 5424 specification](https://tools.ietf.org/html/rfc5424). Ці рівні журналу в порядку убування критичності: **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info**, і **debug**.
 
-So, imagine we log a message using the `debug` method:
+Отже, уявіть, що ми реєструємо повідомлення, використовуючи метод `debug`:
 
     Log::debug('An informational message.');
 
-Given our configuration, the `syslog` channel will write the message to the system log; however, since the error message is not `critical` or above, it will not be sent to Slack. However, if we log an `emergency` message, it will be sent to both the system log and Slack since the `emergency` level is above our minimum level threshold for both channels:
+З огляду на нашу конфігурацію, канал `syslog` записуватиме повідомлення до системного журналу; однак, оскільки повідомлення про помилку не є рівнем `critical` або вищим, то його не буде надіслано до Slack. Однак, якщо ми реєструємо повідомлення рівня `emergency`, то його буде надіслано як до системного журналу, так і до Slack, оскільки рівень `emergency` є вищим за наше мінімальне порогове значення для обох каналів:
 
     Log::emergency('The system is down!');
 
 <a name="writing-log-messages"></a>
-## Writing Log Messages
+## Запис повідомлень журналу
 
-You may write information to the logs using the `Log` [facade](/docs/{{version}}/facades). As previously mentioned, the logger provides the eight logging levels defined in the [RFC 5424 specification](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info** and **debug**:
+Ви можете записувати інформацію в журнали за допомогою [фасаду](/docs/{{version}}/facades) `Log`. Як згадувалося раніше, засіб ведення журналу забезпечує вісім рівнів ведення журналу, визначених у специфікації [RFC 5424 specification](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info**, і **debug**.
 
     use Illuminate\Support\Facades\Log;
 
@@ -194,7 +182,7 @@ You may write information to the logs using the `Log` [facade](/docs/{{version}}
     Log::info($message);
     Log::debug($message);
 
-You may call any of these methods to log a message for the corresponding level. By default, the message will be written to the default log channel as configured by your `logging` configuration file:
+Ви можете викликати будь-який із цих методів, щоб записати повідомлення для відповідного рівня. За замовчуванням повідомлення буде записано в канал журналу за замовчуванням, як налаштовано вашим файлом конфігурації `logging`:
 
     <?php
 
@@ -204,11 +192,14 @@ You may call any of these methods to log a message for the corresponding level. 
     use App\Models\User;
     use Illuminate\Support\Facades\Log;
     use Illuminate\View\View;
-
+    
     class UserController extends Controller
     {
         /**
-         * Show the profile for the given user.
+         * Показати профіль конкретного користувача.
+         *
+         * @param  int  $id
+         * @return \Illuminate\Http\Response
          */
         public function show(string $id): View
         {
@@ -221,15 +212,15 @@ You may call any of these methods to log a message for the corresponding level. 
     }
 
 <a name="contextual-information"></a>
-### Contextual Information
+### Контекстна інформація
 
-An array of contextual data may be passed to the log methods. This contextual data will be formatted and displayed with the log message:
+Методам журналу може бути передано масив контекстних даних. Ці контекстні дані будуть відформатовані та відображені в повідомленні журналу:
 
     use Illuminate\Support\Facades\Log;
 
     Log::info('User {id} failed to login.', ['id' => $user->id]);
 
-Occasionally, you may wish to specify some contextual information that should be included with all subsequent log entries in a particular channel. For example, you may wish to log a request ID that is associated with each incoming request to your application. To accomplish this, you may call the `Log` facade's `withContext` method:
+Іноді ви можете вказати деяку контекстну інформацію, яка повинна бути включена в усі наступні записи журналу в певному каналі. Наприклад, ви можете захотіти зареєструвати ідентифікатор запиту, пов'язаний із кожним вхідним запитом до вашого додатка. Для цього ви можете викликати метод `withContext` фасаду `Log`:
 
     <?php
 
@@ -240,12 +231,15 @@ Occasionally, you may wish to specify some contextual information that should be
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Str;
     use Symfony\Component\HttpFoundation\Response;
-
+    
     class AssignRequestId
     {
         /**
-         * Handle an incoming request.
+         * Обробник вхідного запиту .
          *
+         * @param  \Illuminate\Http\Request  $request
+         * @param  \Closure  $next
+         * @return mixed
          * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
          */
         public function handle(Request $request, Closure $next): Response
@@ -264,7 +258,7 @@ Occasionally, you may wish to specify some contextual information that should be
         }
     }
 
-If you would like to share contextual information across _all_ logging channels, you may invoke the `Log::shareContext()` method. This method will provide the contextual information to all created channels and any channels that are created subsequently:
+Якщо ви хочете додати спільну інформацію між _всіма_ каналами, ви можете викликати метод `Log::shareContext()`. Цей метод надасть додаткову інформацію всім створеним каналам і всім каналам, які будуть створені згодом.
 
     <?php
 
@@ -274,11 +268,10 @@ If you would like to share contextual information across _all_ logging channels,
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Log;
     use Illuminate\Support\Str;
-    use Symfony\Component\HttpFoundation\Response;
 
     class AssignRequestId
     {
-        /**
+         /**
          * Handle an incoming request.
          *
          * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
@@ -296,25 +289,25 @@ If you would like to share contextual information across _all_ logging channels,
     }
 
 > [!NOTE]
-> If you need to share log context while processing queued jobs, you may utilize [job middleware](/docs/{{version}}/queues#job-middleware).
+> Якщо вам потрібно передавати контекст журналу під час обробки завдань у черзі, ви можете використовувати [middleware завдань](/docs/{{version}}}/queues#job-middleware).
 
 <a name="writing-to-specific-channels"></a>
-### Writing to Specific Channels
+### Запис у певні канали
 
-Sometimes you may wish to log a message to a channel other than your application's default channel. You may use the `channel` method on the `Log` facade to retrieve and log to any channel defined in your configuration file:
+За бажанням можна записати повідомлення в канал, відмінний від каналу за замовчуванням вашого додатка. Ви можете використовувати метод `channel` фасаду `Log` для отримання та реєстрації будь-якого каналу, визначеного у вашому файлі конфігурації:
 
     use Illuminate\Support\Facades\Log;
 
     Log::channel('slack')->info('Something happened!');
 
-If you would like to create an on-demand logging stack consisting of multiple channels, you may use the `stack` method:
+Якщо ви хочете створити стек протоколювання за запитом, що складається з декількох каналів, ви можете використовувати метод `stack`:
 
     Log::stack(['single', 'slack'])->info('Something happened!');
 
 <a name="on-demand-channels"></a>
-#### On-Demand Channels
+#### Канали за запитом
 
-It is also possible to create an on-demand channel by providing the configuration at runtime without that configuration being present in your application's `logging` configuration file. To accomplish this, you may pass a configuration array to the `Log` facade's `build` method:
+Також можливо створити канал за запитом, надавши конфігурацію під час виконання, без того, щоб ця конфігурація була присутня у файлі `logging` вашого додатка. Для цього ви можете передати масив конфігурації методу `build` фасаду `Log`:
 
     use Illuminate\Support\Facades\Log;
 
@@ -323,7 +316,7 @@ It is also possible to create an on-demand channel by providing the configuratio
       'path' => storage_path('logs/custom.log'),
     ])->info('Something happened!');
 
-You may also wish to include an on-demand channel in an on-demand logging stack. This can be achieved by including your on-demand channel instance in the array passed to the `stack` method:
+Ви також можете включити канал за запитом у стек журналів за запитом. Цього можна домогтися, включивши екземпляр вашого каналу за запитом у масив, переданий у метод `stack`:
 
     use Illuminate\Support\Facades\Log;
 
@@ -335,14 +328,14 @@ You may also wish to include an on-demand channel in an on-demand logging stack.
     Log::stack(['slack', $channel])->info('Something happened!');
 
 <a name="monolog-channel-customization"></a>
-## Monolog Channel Customization
+## Налаштування каналу Monolog
 
 <a name="customizing-monolog-for-channels"></a>
-### Customizing Monolog for Channels
+### Налаштування Monolog для каналів
 
-Sometimes you may need complete control over how Monolog is configured for an existing channel. For example, you may want to configure a custom Monolog `FormatterInterface` implementation for Laravel's built-in `single` channel.
+Іноді потрібен повний контроль над налаштуванням Monolog для наявного каналу. Наприклад, буває необхідно налаштувати власну реалізацію Monolog `FormatterInterface` для вбудованого в Laravel каналу `single`.
 
-To get started, define a `tap` array on the channel's configuration. The `tap` array should contain a list of classes that should have an opportunity to customize (or "tap" into) the Monolog instance after it is created. There is no conventional location where these classes should be placed, so you are free to create a directory within your application to contain these classes:
+Для початку визначте масив `tap` у конфігурації каналу. Масив `tap` повинен містити список класів, які повинні мати можливість налаштовувати (або «торкатися») екземпляр Monolog після його створення. Не існує звичайного місця для розміщення цих класів, тому ви можете створити каталог у своєму додатку, щоб розмістити ці класи:
 
     'single' => [
         'driver' => 'single',
@@ -352,19 +345,22 @@ To get started, define a `tap` array on the channel's configuration. The `tap` a
         'replace_placeholders' => true,
     ],
 
-Once you have configured the `tap` option on your channel, you're ready to define the class that will customize your Monolog instance. This class only needs a single method: `__invoke`, which receives an `Illuminate\Log\Logger` instance. The `Illuminate\Log\Logger` instance proxies all method calls to the underlying Monolog instance:
+Після того як ви налаштували опцію `tap` свого каналу, ви готові визначити клас, який контролюватиме ваш екземпляр Monolog. Цьому класу потрібен лише один метод: `__invoke`, який отримує екземпляр `Illuminate\Log\Logger`. Екземпляр `Illuminate\Log\Logger` передає всі виклики методів базовому екземпляру Monolog:
 
     <?php
 
     namespace App\Logging;
-
+    
     use Illuminate\Log\Logger;
     use Monolog\Formatter\LineFormatter;
 
     class CustomizeFormatter
     {
         /**
-         * Customize the given logger instance.
+         * Налаштувати переданий екземпляр реєстратора.
+         *
+         * @param  \Illuminate\Log\Logger  $logger
+         * @return void
          */
         public function __invoke(Logger $logger): void
         {
@@ -377,14 +373,14 @@ Once you have configured the `tap` option on your channel, you're ready to defin
     }
 
 > [!NOTE]  
-> All of your "tap" classes are resolved by the [service container](/docs/{{version}}/container), so any constructor dependencies they require will automatically be injected.
+> Усі ваші класи «tap» витягуються через [контейнер служб](/docs/{{version}}/container), тому будь-які залежності конструктора, які їм потрібні, будуть автоматично впроваджені.
 
 <a name="creating-monolog-handler-channels"></a>
-### Creating Monolog Handler Channels
+### Створення обробника каналів Monolog
 
-Monolog has a variety of [available handlers](https://github.com/Seldaek/monolog/tree/main/src/Monolog/Handler) and Laravel does not include a built-in channel for each one. In some cases, you may wish to create a custom channel that is merely an instance of a specific Monolog handler that does not have a corresponding Laravel log driver.  These channels can be easily created using the `monolog` driver.
+У Monolog є безліч [доступних обробників](https://github.com/Seldaek/monolog/tree/main/src/Monolog/Handler), а в Laravel з коробки не включені канали для кожного з них. У деяких випадках вам може знадобитися створити власний канал, який є просто екземпляром певного обробника Monolog, у якого немає відповідного драйвера журналу Laravel. Ці канали можуть бути легко створені за допомогою драйвера `monolog`.
 
-When using the `monolog` driver, the `handler` configuration option is used to specify which handler will be instantiated. Optionally, any constructor parameters the handler needs may be specified using the `with` configuration option:
+При використанні драйвера `monolog` параметр конфігурації `handler` використовується для вказівки того, який обробник буде створено. За бажання будь-які параметри конструктора, необхідні обробнику, можуть бути вказані за допомогою опції конфігурації `with`:
 
     'logentries' => [
         'driver'  => 'monolog',
@@ -396,9 +392,9 @@ When using the `monolog` driver, the `handler` configuration option is used to s
     ],
 
 <a name="monolog-formatters"></a>
-#### Monolog Formatters
+#### Форматери Монолог
 
-When using the `monolog` driver, the Monolog `LineFormatter` will be used as the default formatter. However, you may customize the type of formatter passed to the handler using the `formatter` and `formatter_with` configuration options:
+Під час використання драйвера `monolog`, Monolog-клас `LineFormatter` буде використовуватися як засіб форматування за замовчуванням. Однак ви можете налаштувати тип засобу форматування, переданого обробнику, використовуючи параметри конфігурації `formatter` і `formatter_with`:
 
     'browser' => [
         'driver' => 'monolog',
@@ -409,7 +405,7 @@ When using the `monolog` driver, the Monolog `LineFormatter` will be used as the
         ],
     ],
 
-If you are using a Monolog handler that is capable of providing its own formatter, you may set the value of the `formatter` configuration option to `default`:
+Якщо ви використовуєте обробник Monolog, який може надавати свій власний модуль форматування, ви можете встановити для параметра конфігурації `formatter` значення `default`:
 
     'newrelic' => [
         'driver' => 'monolog',
@@ -417,13 +413,12 @@ If you are using a Monolog handler that is capable of providing its own formatte
         'formatter' => 'default',
     ],
 
+<a name="monolog-processors"></a>
+#### Monolog Процесори (Processors)
 
- <a name="monolog-processors"></a>
- #### Monolog Processors
+Monolog також може обробляти повідомлення перед їхнім записом у журнал. Ви можете створювати свої власні процесори або використовувати [наявні процесори, запропоновані Monolog](https://github.com/Seldaek/monolog/tree/main/src/Monolog/Processor).
 
- Monolog can also process messages before logging them. You can create your own processors or use the [existing processors offered by Monolog](https://github.com/Seldaek/monolog/tree/main/src/Monolog/Processor).
-
- If you would like to customize the processors for a `monolog` driver, add a `processors` configuration value to your channel's configuration:
+Якщо ви хочете кастомізувати процесори для драйвера `monolog`, додайте значення конфігурації `processors` до конфігурації вашого каналу:
 
      'memory' => [
          'driver' => 'monolog',
@@ -443,11 +438,10 @@ If you are using a Monolog handler that is capable of providing its own formatte
          ],
      ],
 
-
 <a name="creating-custom-channels-via-factories"></a>
-### Creating Custom Channels via Factories
+### Створення каналів через фабрики
 
-If you would like to define an entirely custom channel in which you have full control over Monolog's instantiation and configuration, you may specify a `custom` driver type in your `config/logging.php` configuration file. Your configuration should include a `via` option that contains the name of the factory class which will be invoked to create the Monolog instance:
+Якщо ви хочете визначити повністю настроюваний канал, у якому у вас є повний контроль над створенням і конфігурацією Monolog, ви можете вказати тип драйвера `custom` у файлі конфігурації `config/logging.php`. Ваша конфігурація повинна містити параметр `via`, що містить ім'я класу фабрики, яка буде викликатися для створення екземпляра Monolog:
 
     'channels' => [
         'example-custom-channel' => [
@@ -456,7 +450,7 @@ If you would like to define an entirely custom channel in which you have full co
         ],
     ],
 
-Once you have configured the `custom` driver channel, you're ready to define the class that will create your Monolog instance. This class only needs a single `__invoke` method which should return the Monolog logger instance. The method will receive the channels configuration array as its only argument:
+Після того як ви налаштували канал драйвера `custom`, ви готові визначити клас, який створюватиме ваш екземпляр Monolog. Цьому класу потрібен лише один метод `__invoke`, який повинен повертати екземпляр реєстратора Monolog. Метод отримає масив конфігурації каналів як єдиний аргумент:
 
     <?php
 
@@ -467,7 +461,10 @@ Once you have configured the `custom` driver channel, you're ready to define the
     class CreateCustomLogger
     {
         /**
-         * Create a custom Monolog instance.
+         * Створити екземпляр власного реєстратора Monolog.
+         *
+         * @param  array  $config
+         * @return \Monolog\Logger
          */
         public function __invoke(array $config): Logger
         {
@@ -476,56 +473,55 @@ Once you have configured the `custom` driver channel, you're ready to define the
     }
 
 <a name="tailing-log-messages-using-pail"></a>
-## Tailing Log Messages Using Pail
+## Перегляд повідомлення журналу за допомогою Pail
 
-Often you may need to tail your application's logs in real time. For example, when debugging an issue or when monitoring your application's logs for specific types of errors.
+Часто вам може знадобитися переглядати журнали програми в режимі реального часу. Наприклад, під час налагодження проблеми або під час моніторингу журналів програми на предмет певних типів помилок.
 
-Laravel Pail is a package that allows you to easily dive into your Laravel application's log files directly from the command line. Unlike the standard `tail` command, Pail is designed to work with any log driver, including Sentry or Flare. In addition, Pail provides a set of useful filters to help you quickly find what you're looking for.
+Laravel Pail - це пакет, який дає вам змогу легко занурюватися в лог-файли вашого додатка Laravel прямо з командного рядка. На відміну від стандартної команди `tail`, Pail призначений для роботи з будь-яким драйвером журналів, включно з Sentry або Flare. Крім того, Pail надає набір корисних фільтрів, які допоможуть вам швидко знайти те, що ви шукаєте.
 
 <img src="https://laravel.com/img/docs/pail-example.png">
 
 <a name="pail-installation"></a>
-### Installation
+### Установка
 
-> [!WARNING]  
-> Laravel Pail requires [PHP 8.2+](https://php.net/releases/) and the [PCNTL](https://www.php.net/manual/en/book.pcntl.php) extension.
-
-To get started, install Pail into your project using the Composer package manager:
+> [!WARNING]
+> Laravel Pail підтримує [PHP 8.2+](https://php.net/releases/) і розширення [PCNTL](https://www.php.net/manual/en/book.pcntl.php).
+Щоб почати роботу, встановіть Pail у свій проект за допомогою менеджера пакетів Composer:
 
 ```bash
 composer require laravel/pail
 ```
 
 <a name="pail-usage"></a>
-### Usage
+### Використання
 
-To start tailing logs, run the `pail` command:
+Щоб почати відстежувати журнали, виконайте команду `pail`:
 
 ```bash
 php artisan pail
 ```
 
-To increase the verbosity of the output and avoid truncation (…), use the `-v` option:
+Щоб збільшити деталізацію виведення й уникнути усічення (...), використовуйте опцію `-v`:
 
 ```bash
 php artisan pail -v
 ```
 
-For maximum verbosity and to display exception stack traces, use the `-vv` option:
+Для максимальної деталізації та відображення трасувань стека винятків використовуйте опцію `-vvv` :
 
 ```bash
 php artisan pail -vv
 ```
 
-To stop tailing logs, press `Ctrl+C` at any time.
+Щоб припинити відстеження журналів, натисніть `Ctrl+C` у будь-який момент.
 
 <a name="pail-filtering-logs"></a>
-### Filtering Logs
+### Фільтрація логів
 
 <a name="pail-filtering-logs-filter-option"></a>
 #### `--filter`
 
-You may use the `--filter` option to filter logs by their type, file, message, and stack trace content:
+Ви можете використовувати опцію `--filter` для фільтрації журналів за їхнім типом, файлом, повідомленням і вмістом трасування стека:
 
 ```bash
 php artisan pail --filter="QueryException"
@@ -534,7 +530,7 @@ php artisan pail --filter="QueryException"
 <a name="pail-filtering-logs-message-option"></a>
 #### `--message`
 
-To filter logs by only their message, you may use the `--message` option:
+Щоб фільтрувати журнали тільки за їхніми повідомленнями, ви можете використовувати опцію `--message`:
 
 ```bash
 php artisan pail --message="User created"
@@ -543,7 +539,7 @@ php artisan pail --message="User created"
 <a name="pail-filtering-logs-level-option"></a>
 #### `--level`
 
-The `--level` option may be used to filter logs by their [log level](#log-levels):
+Опцію `--level` можна використовувати для фільтрації журналів за їхнім [рівнем](#log-levels):
 
 ```bash
 php artisan pail --level=error
@@ -552,7 +548,7 @@ php artisan pail --level=error
 <a name="pail-filtering-logs-user-option"></a>
 #### `--user`
 
-To only display logs that were written while a given user was authenticated, you may provide the user's ID to the `--user` option:
+Щоб відображати тільки ті журнали, які були записані під час автентифікованим користувачем, ви можете вказати ідентифікатор користувача в опції `---user`:
 
 ```bash
 php artisan pail --user=1

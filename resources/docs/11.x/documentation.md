@@ -27,8 +27,8 @@
     - [URL генерація](/docs/{{version}}/urls)
     - [HTTP Сесії](/docs/{{version}}/session)
     - [Валідація](/docs/{{version}}/validation)
-    - [Error Handling](/docs/{{version}}/errors)
-    - [Logging](/docs/{{version}}/logging)
+    - [Обробка помилок](/docs/{{version}}/errors)
+    - [Логування](/docs/{{version}}/logging)
 - ## Digging Deeper
     - [Artisan Console](/docs/{{version}}/artisan)
     - [Broadcasting](/docs/{{version}}/broadcasting)
