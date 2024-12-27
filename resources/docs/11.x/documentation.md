@@ -29,8 +29,8 @@
     - [Валідація](/docs/{{version}}/validation)
     - [Обробка помилок](/docs/{{version}}/errors)
     - [Логування](/docs/{{version}}/logging)
-- ## Digging Deeper
-    - [Artisan Console](/docs/{{version}}/artisan)
+- ## Копаємо глибше
+    - [Artisan консоль](/docs/{{version}}/artisan)
     - [Broadcasting](/docs/{{version}}/broadcasting)
     - [Cache](/docs/{{version}}/cache)
     - [Collections](/docs/{{version}}/collections)
