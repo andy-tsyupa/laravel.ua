@@ -32,7 +32,7 @@
 - ## Копаємо глибше
     - [Artisan консоль](/docs/{{version}}/artisan)
     - [Broadcasting](/docs/{{version}}/broadcasting)
-    - [Cache](/docs/{{version}}/cache)
+    - [Кешування](/docs/{{version}}/cache)
     - [Collections](/docs/{{version}}/collections)
     - [Contracts](/docs/{{version}}/contracts)
     - [Events](/docs/{{version}}/events)
