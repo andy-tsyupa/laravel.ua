@@ -31,7 +31,7 @@
     - [Логування](/docs/{{version}}/logging)
 - ## Копаємо глибше
     - [Artisan консоль](/docs/{{version}}/artisan)
-    - [Broadcasting](/docs/{{version}}/broadcasting)
+    - [Мовлення](/docs/{{version}}/broadcasting)
     - [Кешування](/docs/{{version}}/cache)
     - [Collections](/docs/{{version}}/collections)
     - [Contracts](/docs/{{version}}/contracts)
@@ -47,7 +47,7 @@
     - [Queues](/docs/{{version}}/queues)
     - [Rate Limiting](/docs/{{version}}/rate-limiting)
     - [Strings](/docs/{{version}}/strings)
-    - [Task Scheduling](/docs/{{version}}/scheduling)
+    - [Планування завдань](/docs/{{version}}/scheduling)
 - ## Security
     - [Authentication](/docs/{{version}}/authentication)
     - [Authorization](/docs/{{version}}/authorization)
