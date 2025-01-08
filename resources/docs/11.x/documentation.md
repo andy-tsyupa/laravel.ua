@@ -33,7 +33,7 @@
     - [Artisan консоль](/docs/{{version}}/artisan)
     - [Мовлення](/docs/{{version}}/broadcasting)
     - [Кешування](/docs/{{version}}/cache)
-    - [Collections](/docs/{{version}}/collections)
+    - [Колекції](/docs/{{version}}/collections)
     - [Contracts](/docs/{{version}}/contracts)
     - [Events](/docs/{{version}}/events)
     - [File Storage](/docs/{{version}}/filesystem)
