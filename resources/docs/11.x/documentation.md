@@ -36,7 +36,7 @@
     - [Колекції](/docs/{{version}}/collections)
     - [Контракти](/docs/{{version}}/contracts)
     - [Події (Events)](/docs/{{version}}/events)
-    - [File Storage](/docs/{{version}}/filesystem)
+    - [Файлове сховище](/docs/{{version}}/filesystem)
     - [Helpers](/docs/{{version}}/helpers)
     - [HTTP Client](/docs/{{version}}/http-client)
     - [Localization](/docs/{{version}}/localization)
